@@ -1,0 +1,327 @@
+.wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.main {
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-1);
+  padding: var(--space-5) var(--space-3);
+}
+
+/* ---- 运行态 ---- */
+.running {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.ring {
+  position: relative;
+  width: 96px;
+  height: 96px;
+}
+
+.ringSvg {
+  width: 96px;
+  height: 96px;
+  transform: rotate(-90deg);
+}
+
+.ringTrack {
+  fill: none;
+  stroke: var(--bg-subtle);
+  stroke-width: 8;
+}
+
+.ringArc {
+  fill: none;
+  stroke: var(--brand-blue);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 264;
+  transition: stroke-dashoffset 400ms ease;
+  animation: spin 2s linear infinite;
+  transform-origin: 48px 48px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ringText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-semibold);
+  color: var(--brand-blue);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.status {
+  margin: 0;
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+.progress {
+  width: 360px;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.track {
+  flex: 1;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background-color: var(--bg-subtle);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--brand-gradient-h);
+  transition: width 400ms ease;
+}
+
+.percent {
+  min-width: 44px;
+  text-align: right;
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.stages {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-tertiary);
+  font-size: var(--fs-caption);
+}
+
+.stageItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stageDot {
+  font-size: var(--fs-note);
+}
+
+.stageItem.done {
+  color: var(--success);
+}
+
+.stageItem.doing {
+  color: var(--brand-accent);
+  font-weight: var(--fw-semibold);
+}
+
+/* ---- 失败 / 阻断态 ---- */
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.stateIcon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgba(250, 173, 20, 0.12);
+  color: var(--warning);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-semibold);
+}
+
+.stateIconError {
+  background-color: rgba(255, 77, 79, 0.12);
+  color: var(--error);
+}
+
+/* 三诊齐全的确认态：就绪图标用成功色 */
+.stateIconReady {
+  background-color: rgba(82, 196, 26, 0.12);
+  color: var(--success);
+}
+
+/* 阻断 / 确认态内的三诊清单：居中容器里保持左对齐并限制宽度 */
+.state .moduleList {
+  width: min(360px, 100%);
+  margin-top: var(--space-1);
+  text-align: left;
+}
+
+/* 阻断态中未完成诊位的直达入口 */
+.fixLink {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--brand-accent);
+  font-family: inherit;
+  font-size: var(--fs-note);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.fixLink:hover {
+  color: var(--brand-blue);
+}
+
+.stateTitle {
+  margin: 0;
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-semibold);
+}
+
+.stateText {
+  margin: 0;
+  max-width: 420px;
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+/* ---- 右侧辅助区 ---- */
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sideCard {
+  padding: var(--space-2);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-1);
+}
+
+.sideTitle {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+}
+
+.moduleList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.moduleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-caption);
+}
+
+.moduleDot {
+  width: 18px;
+  text-align: center;
+}
+
+.moduleDot.ok {
+  color: var(--success);
+}
+
+.moduleDot.doing {
+  color: var(--brand-accent);
+}
+
+.moduleDot.todo {
+  color: var(--text-tertiary);
+}
+
+.moduleLabel {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.moduleTag {
+  color: var(--text-tertiary);
+  font-size: var(--fs-note);
+}
+
+.tip {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+}
+
+.cancel {
+  align-self: center;
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--text-secondary);
+  font-size: var(--fs-caption);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.cancel:hover {
+  color: var(--brand-accent);
+}
+
+.cancelHint {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--fs-note);
+  text-align: center;
+}
+
+@media (max-width: 1023px) {
+  .wrap {
+    grid-template-columns: 1fr;
+  }
+}

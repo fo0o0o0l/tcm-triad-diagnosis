@@ -1,0 +1,472 @@
+/* P8 数据对比页样式（UI/UX §5.7）；颜色/尺寸一律引用 tokens.css 变量。 */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.card {
+  padding: var(--space-2);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-1);
+}
+
+/* ---- 报告选择器 ---- */
+.selectorRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-1);
+}
+
+.selectorField {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.selectorLabel {
+  font-size: var(--fs-note);
+  color: var(--text-secondary);
+}
+
+.select {
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--space-1);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-size: var(--fs-body);
+  font-family: inherit;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--brand-accent);
+}
+
+.swapBtn {
+  flex: 0 0 auto;
+  height: 40px;
+  min-width: 44px;
+  font-size: var(--fs-h3);
+}
+
+.hint {
+  margin-top: var(--space-1);
+  font-size: var(--fs-caption);
+  color: var(--warning);
+}
+
+/* ---- 状态块 ---- */
+.empty,
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.error {
+  color: var(--error);
+}
+
+.muted {
+  color: var(--text-tertiary);
+  font-size: var(--fs-caption);
+}
+
+.skeleton {
+  height: 160px;
+  border-radius: var(--radius-btn);
+  background: linear-gradient(90deg, var(--bg-subtle) 25%, var(--border) 37%, var(--bg-subtle) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+/* ---- 患者条 ---- */
+.patientBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.patientName {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+.patientMeta {
+  font-size: var(--fs-note);
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- 区块标题 ---- */
+.sectionTitle {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+/* ---- 健康状态变化 ---- */
+.healthRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.healthBadge {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  color: #fff;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+}
+
+.healthGood {
+  background-color: var(--health-good);
+}
+
+.healthFair {
+  background-color: var(--health-fair);
+}
+
+.healthPoor {
+  background-color: var(--health-poor);
+}
+
+.healthBad {
+  background-color: var(--health-bad);
+}
+
+.arrow {
+  color: var(--text-tertiary);
+  font-size: var(--fs-h3);
+}
+
+/* ---- 变化语义 ---- */
+.direction {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-note);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+}
+
+.dirImproved {
+  color: var(--success);
+  background-color: rgba(82, 196, 26, 0.12);
+}
+
+.dirWorsened {
+  color: var(--error);
+  background-color: rgba(255, 77, 79, 0.12);
+}
+
+.dirSame {
+  color: var(--text-tertiary);
+  background-color: var(--bg-subtle);
+}
+
+.dirUnknown {
+  color: var(--warning);
+  background-color: rgba(250, 173, 20, 0.14);
+}
+
+/* ---- 特征对比表 ---- */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-caption);
+}
+
+.table th,
+.table td {
+  padding: 8px var(--space-1);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table th {
+  color: var(--text-secondary);
+  font-weight: var(--fw-regular);
+  background-color: var(--bg-subtle);
+}
+
+.featureCell {
+  width: 96px;
+  color: var(--text-secondary);
+}
+
+.changedRow {
+  background-color: rgba(24, 144, 255, 0.04);
+}
+
+.valueChanged {
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+/* ---- 置信度趋势 ---- */
+.trendBars {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  height: 160px;
+  padding: var(--space-2) 0;
+}
+
+.trendBarItem {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.trendBarValue {
+  font-size: var(--fs-note);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.trendBarTrack {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: flex-end;
+  width: 40px;
+  margin: var(--space-1) 0;
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.trendBarFill {
+  width: 100%;
+  min-height: 4px;
+  background-color: var(--brand-blue);
+  border-radius: var(--radius-sm);
+  transition: height 200ms ease;
+}
+
+.trendBarTarget {
+  background-color: var(--brand-purple);
+}
+
+.trendBarLabel {
+  font-size: var(--fs-note);
+  color: var(--text-tertiary);
+}
+
+.trendChart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.trendChart svg {
+  width: 100%;
+  height: auto;
+}
+
+.axis {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+
+.trendLine {
+  fill: none;
+  stroke: var(--brand-blue);
+  stroke-width: 2;
+}
+
+.trendDot {
+  fill: var(--brand-blue);
+}
+
+.trendDotLow {
+  fill: var(--warning);
+}
+
+.trendLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-size: var(--fs-note);
+  color: var(--text-tertiary);
+}
+
+.trendLegendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.trendLegendItem b {
+  color: var(--text-primary);
+}
+
+/* ---- 综合结论对比 ---- */
+.conclusionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.conclusionCol {
+  padding: var(--space-1);
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-btn);
+}
+
+.conclusionHead {
+  margin: 0 0 var(--space-1);
+  font-size: var(--fs-caption);
+  color: var(--text-secondary);
+}
+
+.conclusionText {
+  margin: 0 0 var(--space-1);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--text-primary);
+}
+
+.diffTagAdded,
+.diffTagRemoved {
+  display: inline-block;
+  margin-left: var(--space-1);
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-note);
+}
+
+.diffTagAdded {
+  color: var(--success);
+  background-color: rgba(82, 196, 26, 0.12);
+}
+
+.diffTagRemoved {
+  color: var(--text-tertiary);
+  background-color: var(--border);
+}
+
+/* ---- 右侧设置 ---- */
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.settingCard {
+  padding: var(--space-2);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-1);
+}
+
+.asideTitle {
+  margin: 0 0 var(--space-1);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  color: var(--text-secondary);
+}
+
+.settingList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.settingItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-body);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+/* ---- 响应式（§3.6）---- */
+@media (max-width: 1023px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aside {
+    order: -1;
+    flex-direction: row;
+  }
+
+  .settingCard {
+    flex: 1 1 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .selectorRow {
+    flex-wrap: wrap;
+  }
+
+  .selectorField {
+    flex: 1 1 100%;
+  }
+
+  .conclusionGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- 打印态：隐藏选择器与设置面板，仅输出静态对比内容（§5.7.3）---- */
+@media print {
+  .printHide {
+    display: none !important;
+  }
+
+  .layout {
+    display: block;
+  }
+
+  .card {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+}

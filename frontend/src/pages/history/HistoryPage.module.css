@@ -1,0 +1,455 @@
+/* P7 历史记录页样式（UI/UX §5.6）；颜色/尺寸一律引用 tokens.css 变量。 */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.main {
+  min-width: 0;
+}
+
+/* ---- 搜索筛选栏 ---- */
+.searchBar {
+  padding: var(--space-2);
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.searchRow {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.searchInput {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 40px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-size: var(--fs-body);
+  font-family: inherit;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--brand-accent);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px var(--space-1);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background-color: var(--surface);
+  color: var(--text-secondary);
+  font-size: var(--fs-caption);
+}
+
+.chipRemove {
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary);
+  font-size: var(--fs-caption);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.chipRemove:hover {
+  color: var(--error);
+}
+
+.dateRange {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+}
+
+.dateLabel {
+  color: var(--text-secondary);
+  font-size: var(--fs-caption);
+}
+
+.dateInput {
+  height: 36px;
+  padding: 0 var(--space-1);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-size: var(--fs-caption);
+  font-family: inherit;
+}
+
+.presets {
+  display: flex;
+  gap: var(--space-1);
+  margin-left: auto;
+}
+
+.presetBtn {
+  padding: 4px var(--space-1);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background-color: var(--surface);
+  color: var(--text-secondary);
+  font-size: var(--fs-note);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.presetBtn:hover {
+  border-color: var(--brand-accent);
+  color: var(--brand-accent);
+}
+
+.searchActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-2);
+}
+
+.count {
+  color: var(--text-secondary);
+  font-size: var(--fs-caption);
+}
+
+.resetBtn {
+  border: none;
+  background: transparent;
+  color: var(--brand-accent);
+  font-size: var(--fs-caption);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ---- 列表 ---- */
+.list {
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-1);
+  transition: var(--theme-transition), box-shadow 200ms ease, transform 200ms ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-2);
+  transform: translateY(-1px);
+}
+
+.cardSelected {
+  border-color: var(--brand-accent);
+}
+
+.cardCheckbox {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+  cursor: pointer;
+}
+
+.cardMain {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.patient {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+.session {
+  font-size: var(--fs-caption);
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.time {
+  font-size: var(--fs-caption);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.cardBody {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+
+.summary {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  font-size: var(--fs-caption);
+}
+
+.openBtn {
+  flex: none;
+  height: 32px;
+  padding: 0 var(--space-1);
+}
+
+.deleteBtn {
+  flex: none;
+  height: 32px;
+  padding: 0 var(--space-1);
+  color: var(--error);
+  border-color: var(--border-strong);
+}
+
+.deleteBtn:hover:not(:disabled) {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+/* ---- 徽标 ---- */
+.healthBadge {
+  padding: 2px var(--space-1);
+  border-radius: var(--radius-pill);
+  color: #fff;
+  font-size: var(--fs-note);
+  font-weight: var(--fw-semibold);
+}
+
+.healthGood {
+  background-color: var(--health-good);
+}
+
+.healthFair {
+  background-color: var(--health-fair);
+}
+
+.healthPoor {
+  background-color: var(--health-poor);
+}
+
+.healthBad {
+  background-color: var(--health-bad);
+}
+
+.confBadge {
+  flex: none;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  color: #fff;
+  font-size: var(--fs-note);
+  font-variant-numeric: tabular-nums;
+}
+
+.confHigh {
+  background-color: var(--confidence-high);
+}
+
+.confMedium {
+  background-color: var(--confidence-medium);
+}
+
+.confLow {
+  background-color: var(--confidence-low);
+}
+
+.archivedBadge {
+  padding: 2px var(--space-1);
+  border-radius: var(--radius-pill);
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  font-size: var(--fs-note);
+}
+
+/* ---- 状态 ---- */
+.skeletonList {
+  margin: var(--space-2) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.skeletonCard {
+  height: 76px;
+  border-radius: var(--radius-card);
+  background: linear-gradient(90deg, var(--bg-subtle) 25%, var(--border) 37%, var(--bg-subtle) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+.empty,
+.error {
+  margin-top: var(--space-3);
+  padding: var(--space-4) var(--space-2);
+  text-align: center;
+  color: var(--text-secondary);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-card);
+}
+
+.loadMore {
+  margin-top: var(--space-2);
+}
+
+.loadingMore {
+  margin-top: var(--space-2);
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: var(--fs-caption);
+}
+
+.sentinel {
+  height: 1px;
+}
+
+/* ---- 右侧栏 ---- */
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.statCard {
+  padding: var(--space-2);
+  background: var(--brand-gradient);
+  border-radius: var(--radius-card);
+  color: #fff;
+  box-shadow: var(--shadow-brand);
+}
+
+.statValue {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-h1);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.statLabel {
+  font-size: var(--fs-caption);
+}
+
+.quickCard {
+  padding: var(--space-2);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.asideTitle {
+  margin: 0 0 var(--space-1);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+}
+
+.quickList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.quickItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-caption);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.quickItemDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- 底部对比操作条（占位） ---- */
+.compareBar {
+  position: sticky;
+  bottom: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--surface);
+  border: 1px solid var(--brand-accent);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-3);
+}
+
+.compareBarText {
+  flex: 1 1 auto;
+  font-size: var(--fs-caption);
+  color: var(--text-primary);
+}
+
+.compareHint {
+  margin-top: var(--space-1);
+  color: var(--warning);
+  font-size: var(--fs-caption);
+}
+
+/* ---- 响应式 ---- */
+@media (max-width: 1023px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aside {
+    order: -1;
+  }
+
+  .presets {
+    margin-left: 0;
+  }
+}

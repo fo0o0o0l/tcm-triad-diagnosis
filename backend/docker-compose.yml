@@ -1,0 +1,43 @@
+# 开发期基础设施编排（《开发任务文档》§2.3）
+# 启动：docker compose -f backend/docker-compose.yml up -d
+# 状态：docker compose -f backend/docker-compose.yml ps
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: tcm-postgres
+    environment:
+      POSTGRES_USER: tcm
+      POSTGRES_PASSWORD: tcm_dev_pwd
+      POSTGRES_DB: tcm_triad
+    ports: ["5432:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tcm -d tcm_triad"]
+      interval: 5s
+      retries: 10
+
+  redis:
+    image: redis:7
+    container_name: tcm-redis
+    ports: ["6379:6379"]
+
+  # 说明：minio/minio 官方镜像已于 2025 年从 Docker Hub 下架，quay.io/minio/minio 亦需鉴权，
+  # 故改用 Bitnami 的 MinIO 遗留镜像（同为 MinIO 服务，数据目录为 /bitnami/minio/data）。
+  minio:
+    image: bitnamilegacy/minio:latest
+    container_name: tcm-minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports: ["9000:9000", "9001:9001"]
+    volumes: ["miniodata:/bitnami/minio/data"]
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: tcm-mailhog
+    ports: ["1025:1025", "8025:8025"]   # 8025 为 Web UI
+
+volumes:
+  pgdata:
+  miniodata:

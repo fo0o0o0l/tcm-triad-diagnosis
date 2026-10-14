@@ -1,0 +1,413 @@
+/* P9 个人中心页样式（UI/UX §5.8）；颜色/尺寸一律引用 tokens.css 变量。 */
+
+.layout {
+  display: grid;
+  grid-template-columns: 176px minmax(0, 1fr) 280px;
+  gap: var(--space-3);
+  align-items: start;
+}
+
+/* ---- 左侧分组导航 ---- */
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.navItem {
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-btn);
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  text-align: left;
+  cursor: pointer;
+  transition: var(--theme-transition);
+}
+
+.navItem:hover {
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.navItemActive {
+  border-color: var(--border);
+  background-color: var(--surface);
+  color: var(--brand-accent);
+  font-weight: var(--fw-semibold);
+}
+
+/* ---- 内容区 ---- */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.card {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background-color: var(--surface);
+  box-shadow: var(--shadow-1);
+  transition: var(--theme-transition);
+}
+
+.cardTitle {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-h3);
+  font-weight: var(--fw-semibold);
+}
+
+.hint {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: var(--fs-note);
+  line-height: var(--lh-note);
+}
+
+.error {
+  margin: var(--space-1) 0 0;
+  color: var(--error);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+}
+
+/* ---- 头像 ---- */
+.avatarRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--bg-subtle);
+}
+
+.avatarFallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-accent);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-semibold);
+}
+
+.fileInput {
+  display: none;
+}
+
+/* ---- 表单 ---- */
+.field {
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+.fieldLabel {
+  display: block;
+  margin-bottom: var(--space-1);
+  color: var(--text-secondary);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+}
+
+.input {
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: var(--fs-body);
+  transition: var(--theme-transition);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--brand-accent);
+}
+
+.input[readonly] {
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-1);
+  align-items: center;
+}
+
+.primaryButton {
+  min-width: 104px;
+  height: 40px;
+  padding: 0 var(--space-3);
+  border: none;
+  border-radius: var(--radius-btn);
+  background: var(--brand-gradient);
+  color: #fff;
+  font-family: inherit;
+  font-size: var(--fs-body);
+  cursor: pointer;
+  box-shadow: var(--shadow-brand);
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: var(--brand-gradient-hover);
+}
+
+.secondaryButton {
+  height: 36px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  background-color: var(--surface);
+  color: var(--brand-accent);
+  font-family: inherit;
+  font-size: var(--fs-caption);
+  cursor: pointer;
+  transition: var(--theme-transition);
+}
+
+.secondaryButton:hover:not(:disabled) {
+  border-color: var(--brand-accent);
+  background-color: var(--bg-subtle);
+}
+
+.dangerButton {
+  height: 40px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--error);
+  border-radius: var(--radius-btn);
+  background-color: transparent;
+  color: var(--error);
+  font-family: inherit;
+  font-size: var(--fs-body);
+  cursor: pointer;
+  transition: var(--theme-transition);
+}
+
+.dangerButton:hover:not(:disabled) {
+  background-color: var(--bg-subtle);
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
+.dangerButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.linkButton {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  color: var(--brand-accent);
+  font-size: var(--fs-caption);
+}
+
+/* ---- 外观设置：主题卡片（§3.7）---- */
+.themeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-2);
+}
+
+.themeCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-card);
+  background-color: var(--surface);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: var(--theme-transition);
+}
+
+.themeCard:hover {
+  border-color: var(--brand-accent);
+}
+
+.themeCardActive {
+  border-color: var(--brand-accent);
+  box-shadow: 0 0 0 2px var(--brand-accent) inset;
+}
+
+.themeSwatch {
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+/* 预览色仅用于缩略图，不参与全局令牌（组件不写死主题色值） */
+.preview_light .themeSwatch {
+  background-color: #ffffff;
+}
+
+.preview_blue_purple .themeSwatch {
+  background-color: #f6f4fd;
+}
+
+.preview_dark .themeSwatch {
+  background-color: #15161a;
+}
+
+.themeName {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+}
+
+.themeCheck {
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-1);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--brand-accent);
+  color: #fff;
+  font-size: var(--fs-note);
+  line-height: 20px;
+  text-align: center;
+}
+
+/* ---- 我的报告 ---- */
+.reportList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0 0 var(--space-2);
+  padding: 0;
+  list-style: none;
+}
+
+.reportItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: var(--fs-body);
+  text-align: left;
+  cursor: pointer;
+  transition: var(--theme-transition);
+}
+
+.reportItem:hover {
+  border-color: var(--brand-accent);
+}
+
+.reportPatient {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tag {
+  padding: 2px var(--space-1);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-note);
+  line-height: var(--lh-note);
+}
+
+.health_good {
+  color: var(--health-good);
+  background-color: var(--bg-subtle);
+}
+
+.health_fair {
+  color: var(--health-fair);
+  background-color: var(--bg-subtle);
+}
+
+.health_poor {
+  color: var(--health-poor);
+  background-color: var(--bg-subtle);
+}
+
+.health_bad {
+  color: var(--health-bad);
+  background-color: var(--bg-subtle);
+}
+
+/* ---- 右侧账号状态 ---- */
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.asideUser {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.asideName {
+  margin: 0 0 2px;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+}
+
+.stats {
+  display: flex;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.stats dd {
+  margin: 2px 0 0;
+}
+
+.statValue {
+  font-size: var(--fs-h2);
+  line-height: var(--lh-h2);
+  font-weight: var(--fw-semibold);
+}
+
+/* ---- 响应式（§5.8.3 移动端：左导航折叠为顶部 Tab）---- */
+@media (max-width: 1023px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nav {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .navItem {
+    flex: 0 0 auto;
+  }
+
+  .aside {
+    flex-direction: column;
+  }
+}

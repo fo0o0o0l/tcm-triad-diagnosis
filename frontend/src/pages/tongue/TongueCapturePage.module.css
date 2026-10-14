@@ -1,0 +1,351 @@
+/* P2 舌诊采集页样式（引用 Design Token，禁止硬编码颜色/尺寸，UI/UX §3） */
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ---- 会话标识 ---- */
+.sessionBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  font-size: var(--fs-caption);
+  color: var(--text-secondary);
+}
+
+.sessionLabel {
+  color: var(--text-tertiary);
+}
+
+.sessionId {
+  padding: 2px var(--space-1);
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family);
+  color: var(--text-primary);
+}
+
+/* ---- 子步骤条 ---- */
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-caption);
+  color: var(--text-tertiary);
+  background-color: var(--surface);
+}
+
+.stepDot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--bg-subtle);
+  color: var(--text-tertiary);
+  font-size: var(--fs-note);
+}
+
+.step.done {
+  border-color: var(--success);
+  color: var(--text-primary);
+}
+
+.step.done .stepDot {
+  background-color: var(--success);
+  color: #fff;
+}
+
+.step.active {
+  border-color: var(--brand-accent);
+  color: var(--brand-accent);
+}
+
+.step.active .stepDot {
+  background-color: var(--brand-accent);
+  color: #fff;
+}
+
+/* ---- 两栏布局 ---- */
+.grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: var(--space-3);
+}
+
+@media (max-width: 1023px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+/* ---- 采集舞台 ---- */
+.stage {
+  position: relative;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.preview,
+.video {
+  max-width: 100%;
+  max-height: 360px;
+  display: block;
+}
+
+.mask {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  max-width: 100%;
+  max-height: 360px;
+  opacity: 0.55;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.stageEmpty {
+  padding: var(--space-3);
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: var(--fs-caption);
+}
+
+.stageTip {
+  margin-top: var(--space-1);
+  font-size: var(--fs-note);
+  color: var(--text-tertiary);
+}
+
+.privacy {
+  margin: 0;
+  font-size: var(--fs-note);
+  color: var(--text-tertiary);
+}
+
+/* ---- 结果块 ---- */
+.block {
+  padding: var(--space-2);
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.blockTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1);
+  margin-bottom: var(--space-1);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  color: var(--text-secondary);
+}
+
+.metrics {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--fs-caption);
+}
+
+.metricLabel {
+  color: var(--text-secondary);
+}
+
+.inline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  font-size: var(--fs-caption);
+  color: var(--text-secondary);
+}
+
+.muted {
+  color: var(--text-tertiary);
+  font-size: var(--fs-note);
+}
+
+/* ---- 置信度徽标 ---- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px var(--space-1);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-note);
+  font-weight: var(--fw-semibold);
+  color: #fff;
+}
+
+.badge.high {
+  background-color: var(--confidence-high);
+}
+
+.badge.medium {
+  background-color: var(--confidence-medium);
+}
+
+.badge.low {
+  background-color: var(--confidence-low);
+}
+
+/* ---- 特征卡 ---- */
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-1);
+}
+
+@media (max-width: 767px) {
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.featureCard {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.featureName {
+  font-size: var(--fs-note);
+  color: var(--text-tertiary);
+}
+
+.featureLabel {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+/* ---- AI 解读 ---- */
+.summary {
+  margin: 0 0 var(--space-2);
+  padding: var(--space-2);
+  background-color: var(--surface);
+  border-left: 3px solid var(--brand-accent);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-body);
+  color: var(--text-primary);
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+
+.tag {
+  padding: 2px var(--space-1);
+  background-color: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-note);
+  color: var(--text-secondary);
+}
+
+.tagPrimary {
+  padding: 2px var(--space-1);
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--brand-accent);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-note);
+  color: var(--brand-accent);
+}
+
+.recommendations {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-3);
+  font-size: var(--fs-caption);
+  color: var(--text-secondary);
+}
+
+.recommendations li {
+  margin-bottom: var(--space-1);
+}
+
+/* ---- 状态 / 错误 / 空态 ---- */
+.status {
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-caption);
+  color: var(--brand-accent);
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: flex-start;
+  padding: var(--space-2);
+  background-color: rgba(255, 77, 79, 0.08);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-caption);
+  color: var(--error);
+}
+
+.suggestions {
+  margin: 0;
+  padding-left: var(--space-3);
+  color: var(--error);
+}
+
+.empty {
+  padding: var(--space-3);
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: var(--fs-caption);
+}

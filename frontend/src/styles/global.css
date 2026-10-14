@@ -1,0 +1,559 @@
+/**
+ * 全局基础样式：仅引入令牌与最小基础样式。
+ * 组件级样式由各组件自行维护（后续 M0-9 引入通用组件时扩展）。
+ */
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  transition: var(--theme-transition);
+}
+
+a {
+  color: var(--brand-accent);
+  text-decoration: none;
+}
+
+/* ---- 页面骨架（components/PageShell.tsx）---- */
+.page-shell {
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-3);
+}
+
+.page-shell__title {
+  margin: 0;
+  font-size: var(--fs-h1);
+  line-height: var(--lh-h1);
+  font-weight: var(--fw-semibold);
+}
+
+.page-shell__desc {
+  margin: var(--space-1) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+}
+
+.page-shell__body {
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-1);
+}
+
+/* ---- 应用布局 · 顶部导航栏（components/Layout，UI/UX §4.2）---- */
+.app-layout {
+  min-height: 100%;
+}
+
+.app-layout__nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-3);
+  background-color: var(--nav-bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-layout__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.app-layout__logo {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--brand-gradient);
+  color: #fff;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+}
+
+.app-layout__title {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+.app-layout__session {
+  margin-left: var(--space-1);
+  padding: 2px var(--space-1);
+  font-size: var(--fs-note);
+  color: var(--text-secondary);
+  background-color: var(--bg-subtle);
+  border-radius: var(--radius-pill);
+  /* 作为「新建会话」按钮使用：去掉按钮默认样式，保持胶囊外观 */
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.app-layout__session:hover {
+  color: var(--text-primary);
+}
+
+.app-layout__user {
+  position: relative;
+}
+
+.app-layout__user-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  font-size: var(--fs-body);
+}
+
+.app-layout__avatar {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--brand-gradient);
+  color: #fff;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  object-fit: cover;
+}
+
+.app-layout__username {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-layout__caret {
+  color: var(--text-tertiary);
+  transition: transform 200ms ease-out;
+}
+
+.app-layout__caret.is-open {
+  transform: rotate(180deg);
+}
+
+.app-layout__menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  min-width: 180px;
+  padding: var(--space-1);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-3);
+}
+
+.app-layout__menu-item {
+  width: 100%;
+  padding: var(--space-1);
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: var(--fs-body);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.app-layout__menu-item:hover {
+  background-color: var(--bg-subtle);
+}
+
+.app-layout__menu-item--danger {
+  color: var(--error);
+}
+
+.app-layout__menu-sep {
+  height: 1px;
+  margin: var(--space-1) 0;
+  background-color: var(--border);
+}
+
+.app-layout__guest {
+  color: var(--text-tertiary);
+  font-size: var(--fs-caption);
+}
+
+/* ---- 布局主体 · 左侧诊断流程步骤条（components/Layout，UI/UX §4.1 ② / §4.3）---- */
+.app-layout__body {
+  display: flex;
+  align-items: flex-start;
+}
+
+.app-layout__sidebar {
+  flex: 0 0 200px;
+  width: 200px;
+  position: sticky;
+  top: 60px;
+  max-height: calc(100vh - 60px);
+  overflow-y: auto;
+  padding: var(--space-5) var(--space-2) var(--space-3) var(--space-3);
+}
+
+.app-layout__steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-layout__step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-caption);
+  transition: var(--theme-transition);
+}
+
+.app-layout__step:hover {
+  background-color: var(--bg-subtle);
+}
+
+.app-layout__step.is-active {
+  border-color: var(--brand-accent);
+  background-color: var(--bg-subtle);
+  color: var(--brand-accent);
+  font-weight: var(--fw-semibold);
+}
+
+.app-layout__step.is-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.app-layout__step-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--bg-subtle);
+  color: var(--text-tertiary);
+  font-size: var(--fs-note);
+}
+
+.app-layout__step.is-active .app-layout__step-index {
+  background-color: var(--brand-accent);
+  color: #fff;
+}
+
+.app-layout__step-label {
+  flex: 1 1 auto;
+}
+
+.app-layout__step-tag {
+  font-size: var(--fs-note);
+  color: var(--text-tertiary);
+}
+
+.app-layout__content {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: calc(100vh - 60px);
+}
+
+/* 窄屏（<1024px）：左侧栏折叠为顶部横向步骤条（UI/UX §4.1） */
+@media (max-width: 1023px) {
+  .app-layout__body {
+    flex-direction: column;
+  }
+
+  .app-layout__sidebar {
+    position: static;
+    flex: none;
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+    padding: var(--space-2) var(--space-3) 0;
+  }
+
+  .app-layout__steps {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .app-layout__step {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
+/* ---- 通用表单与按钮（登录 / 注册页共用）---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  height: 40px;
+  padding: 0 var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-btn);
+  font-size: var(--fs-body);
+  font-family: inherit;
+  cursor: pointer;
+  transition: var(--theme-transition);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn--primary {
+  background: var(--brand-gradient);
+  color: #fff;
+  box-shadow: var(--shadow-brand);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--brand-gradient-hover);
+}
+
+.btn--ghost {
+  background-color: var(--surface);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  border-color: var(--brand-accent);
+  color: var(--brand-accent);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+.form-field {
+  margin-bottom: var(--space-2);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-size: var(--fs-caption);
+  color: var(--text-secondary);
+}
+
+.form-input {
+  width: 100%;
+  height: 40px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-size: var(--fs-body);
+  font-family: inherit;
+  transition: var(--theme-transition);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--brand-accent);
+}
+
+.form-input-row {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.form-input-row .form-input {
+  flex: 1;
+}
+
+.form-error {
+  margin-bottom: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background-color: rgba(255, 77, 79, 0.08);
+  color: var(--error);
+  font-size: var(--fs-caption);
+}
+
+.form-hint {
+  margin-top: var(--space-1);
+  font-size: var(--fs-note);
+  color: var(--text-tertiary);
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-caption);
+}
+
+.checkbox-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.checkbox-note {
+  margin: calc(-1 * var(--space-2)) 0 var(--space-3);
+  font-size: var(--fs-note);
+  color: var(--text-tertiary);
+}
+
+.form-link {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--brand-accent);
+  font-size: var(--fs-caption);
+  cursor: pointer;
+}
+
+/* ---- 登录 / 注册页外壳（UI/UX §5.1.1）---- */
+.auth-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  padding: var(--space-5) var(--space-3);
+  background-color: var(--bg-subtle);
+}
+
+.auth-brand {
+  width: 360px;
+  padding: var(--space-5) var(--space-4);
+  border-radius: var(--radius-card);
+  background:
+    radial-gradient(120% 80% at 0% 0%, rgba(24, 144, 255, 0.1) 0%, transparent 60%),
+    radial-gradient(120% 80% at 100% 100%, rgba(114, 46, 209, 0.12) 0%, transparent 60%),
+    var(--surface);
+}
+
+.auth-brand__title {
+  margin: var(--space-3) 0 var(--space-1);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+}
+
+.auth-brand__subtitle {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--fs-caption);
+}
+
+.auth-card {
+  width: 400px;
+  padding: var(--space-4);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-3);
+}
+
+.auth-card__title {
+  margin: 0 0 var(--space-3);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-semibold);
+  text-align: center;
+}
+
+.auth-features {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.auth-feature {
+  padding: var(--space-2);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-1);
+}
+
+.auth-feature__title {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+}
+
+.auth-feature__desc {
+  margin-top: 2px;
+  color: var(--text-secondary);
+  font-size: var(--fs-caption);
+}
+
+.auth-disclaimer {
+  margin-top: var(--space-2);
+  color: var(--text-tertiary);
+  font-size: var(--fs-note);
+  text-align: center;
+}
+
+@media (max-width: 1023px) {
+  .auth-features {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .auth-shell {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .auth-brand,
+  .auth-card {
+    width: 100%;
+    max-width: 400px;
+  }
+}

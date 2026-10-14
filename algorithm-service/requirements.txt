@@ -1,0 +1,8 @@
+# 三诊合一 算法服务 —— 独立依赖（若单独部署则 pip install -r requirements.txt）
+# 开发期可直接复用 backend/.venv（依赖已覆盖），无需另建虚拟环境。
+
+fastapi==0.115.0
+uvicorn[standard]==0.32.*
+httpx==0.27.*
+pydantic==2.*
+pydantic-settings==2.*

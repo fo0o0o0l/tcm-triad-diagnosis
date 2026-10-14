@@ -1,0 +1,126 @@
+/**
+ * Design Token（《UI/UX 设计文档》§3）
+ *
+ * 约定：组件禁止硬编码颜色与尺寸，一律引用本文件变量（§2.1 前端规范）。
+ * 主题切换见 §3.7：三套主题（白色 / 蓝紫 / 深色），默认白色主题（不设置 `data-theme`）；
+ * `[data-theme='blue-purple']` 与 `[data-theme='dark']` 分别覆盖中性基底与强调色。
+ */
+
+:root {
+  /* ---- §3.1 品牌主色（蓝紫渐变，仅作点缀与强调）---- */
+  --brand-blue: #1890ff;
+  --brand-purple: #722ed1;
+  --brand-gradient: linear-gradient(135deg, #1890ff 0%, #722ed1 100%);
+  --brand-gradient-hover: linear-gradient(135deg, #40a9ff 0%, #9254de 100%);
+  --brand-gradient-h: linear-gradient(90deg, #1890ff 0%, #722ed1 100%);
+  --brand-accent: var(--brand-blue);
+
+  /* ---- §3.1 中性色（白色主题基底）---- */
+  --bg-page: #ffffff;
+  --bg-subtle: #f7f9fc;
+  --surface: #ffffff;
+  --border: #edeff3;
+  --border-strong: #e0e4eb;
+  --nav-bg: #ffffff;
+  --text-primary: #1f2733;
+  --text-secondary: #5a6472;
+  --text-tertiary: #98a2b3;
+
+  /* ---- §3.1 语义色 ---- */
+  --success: #52c41a;
+  --warning: #faad14;
+  --error: #ff4d4f;
+  --info: #1890ff;
+
+  /* ---- §3.1 置信度色板（PRD §7.2）---- */
+  --confidence-high: var(--success);
+  --confidence-medium: var(--brand-blue);
+  --confidence-low: var(--warning);
+
+  /* ---- §3.1 报告健康状态色板 ---- */
+  --health-good: #52c41a;
+  --health-fair: #1890ff;
+  --health-poor: #faad14;
+  --health-bad: #ff4d4f;
+
+  /* ---- §3.2 字体 ---- */
+  --font-family:
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', system-ui, -apple-system, sans-serif;
+  --fs-display: 32px;
+  --lh-display: 40px;
+  --fs-h1: 24px;
+  --lh-h1: 32px;
+  --fs-h2: 20px;
+  --lh-h2: 28px;
+  --fs-h3: 16px;
+  --lh-h3: 24px;
+  --fs-body: 14px;
+  --lh-body: 22px;
+  --fs-caption: 13px;
+  --lh-caption: 20px;
+  --fs-note: 12px;
+  --lh-note: 18px;
+  --fw-semibold: 600;
+  --fw-regular: 400;
+
+  /* ---- §3.3 间距（基础单位 8px，所有间距取 8 的整数倍）---- */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+
+  /* ---- §3.4 圆角 ---- */
+  --radius-card: 12px;
+  --radius-btn: 6px;
+  --radius-pill: 999px;
+  --radius-sm: 4px;
+
+  /* ---- §3.5 阴影 ---- */
+  --shadow-1: 0 1px 2px rgba(31, 39, 51, 0.04);
+  --shadow-2: 0 4px 12px rgba(31, 39, 51, 0.06);
+  --shadow-3: 0 8px 24px rgba(31, 39, 51, 0.1);
+  --shadow-brand: 0 6px 16px rgba(114, 46, 209, 0.24);
+
+  /* ---- §3.7 主题过渡 ---- */
+  --theme-transition:
+    background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+
+  /* ---- §3.6 栅格（媒体查询值，供实现参照，非可用变量）----
+     XL >=1440px 四栏（左 200 / 右 320）
+     L  1280-1439px 四栏（左 176 / 右 288）
+     M  1024-1279px 右栏折叠为抽屉
+     S  768-1023px  左栏转顶部步骤条
+     XS <768px      单列（仅采集与问诊可用）
+     主内容区最大宽度 1200px ---- */
+  --layout-max-width: 1200px;
+}
+
+/* §3.7 蓝紫主题：仅覆盖中性基底与强调色，语义色/渐变保持不变 */
+[data-theme='blue-purple'] {
+  --bg-page: #f6f4fd;
+  --bg-subtle: #efecfb;
+  --surface: #ffffff;
+  --border: #e2dcf5;
+  --border-strong: #cfc4ee;
+  --nav-bg: linear-gradient(90deg, #f0ecfd 0%, #f8f6ff 100%);
+  --brand-accent: var(--brand-purple);
+  --text-primary: #241a33;
+}
+
+/* §3.7 深色主题（扩展主题）：与蓝紫主题同理，只覆盖中性基底与强调色，
+   语义色与品牌渐变保持一致。新增令牌覆盖必须同步 UI/UX §3.7 令牌覆盖表，
+   禁止在组件内写死深色专用色值。 */
+[data-theme='dark'] {
+  --bg-page: #15161a;
+  --bg-subtle: #1d1f24;
+  --surface: #202227;
+  --border: #2e3138;
+  --border-strong: #3b3f47;
+  --nav-bg: #202227;
+  --brand-accent: #40a9ff;
+  --text-primary: #e6e8ec;
+  --text-secondary: #a8b0bd;
+  --text-tertiary: #7c8695;
+}

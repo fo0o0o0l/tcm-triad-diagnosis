@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>三诊合一分析系统 - 测试用例</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+      margin: 0;
+      padding: 24px;
+      color: #1f2937;
+      background: #f3f4f6;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1500px;
+      margin: 0 auto;
+      background: white;
+      padding: 24px 32px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      border-radius: 8px;
+    }
+    .header {
+      border-bottom: 2px solid #1e40af;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      color: #1e40af;
+      margin: 0 0 8px 0;
+      font-size: 24px;
+    }
+    .header .meta {
+      color: #6b7280;
+      font-size: 13px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .summary {
+      background: #eff6ff;
+      border-left: 4px solid #1e40af;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      border-radius: 0 4px 4px 0;
+    }
+    .summary strong { color: #1e40af; }
+    .summary ul { margin: 6px 0 0 0; padding-left: 20px; }
+    .summary li { margin: 2px 0; }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+    .toolbar label { font-size: 13px; color: #4b5563; }
+    .filter-select {
+      padding: 6px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      font-size: 13px;
+      background: white;
+    }
+    .btn {
+      padding: 6px 14px;
+      background: #1e40af;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn:hover { background: #1e3a8a; }
+    .btn-secondary { background: #6b7280; }
+    .btn-secondary:hover { background: #4b5563; }
+
+    .section {
+      margin-top: 28px;
+      break-inside: avoid;
+    }
+    .section-title {
+      background: #1e40af;
+      color: white;
+      padding: 8px 16px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 4px 4px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .section-title .count {
+      font-size: 12px;
+      font-weight: 400;
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid #e5e7eb;
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      background: white;
+    }
+    thead th {
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 9px 8px;
+      text-align: left;
+      border: 1px solid #cbd5e1;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    td {
+      padding: 8px;
+      border: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+    tbody tr:nth-child(even) { background: #f8fafc; }
+    tbody tr:hover { background: #eff6ff; }
+    tbody tr.hidden { display: none; }
+
+    .col-id { width: 120px; white-space: nowrap; }
+    .col-module { width: 80px; }
+    .col-item { width: 150px; }
+    .col-pre { width: 150px; }
+    .col-step { width: 320px; }
+    .col-expect { width: 260px; }
+    .col-actual { width: 160px; }
+    .col-status { width: 90px; text-align: center; }
+
+    .case-id {
+      font-family: "Consolas", "Monaco", monospace;
+      font-weight: 600;
+      color: #1e40af;
+      font-size: 12px;
+    }
+    .steps {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .steps li { margin: 2px 0; }
+
+    .status-select {
+      padding: 4px 6px;
+      font-size: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 3px;
+      width: 100%;
+      background: white;
+      cursor: pointer;
+    }
+    .status-pending { color: #6b7280; }
+    .status-pass { color: #16a34a; font-weight: 600; }
+    .status-fail { color: #dc2626; font-weight: 600; }
+    .status-blocked { color: #d97706; font-weight: 600; }
+    .status-na { color: #6b7280; }
+
+    .actual-input {
+      width: 100%;
+      min-height: 28px;
+      border: 1px dashed #cbd5e1;
+      padding: 4px 6px;
+      font-size: 12px;
+      border-radius: 3px;
+      font-family: inherit;
+      background: #fdfdfd;
+    }
+    .actual-input:focus {
+      outline: none;
+      border-color: #1e40af;
+      background: white;
+    }
+
+    .footer {
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+      color: #6b7280;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* 打印优化 */
+    @media print {
+      body { padding: 0; background: white; }
+      .container { box-shadow: none; padding: 8px; max-width: 100%; }
+      .no-print { display: none !important; }
+      .section { page-break-inside: avoid; }
+      table { font-size: 10.5px; }
+      thead th { background: #e2e8f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .section-title { background: #1e40af !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      tbody tr:nth-child(even) { background: #f8fafc !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .actual-input { border: 1px solid #cbd5e1; }
+      .status-select { border: 1px solid #cbd5e1; }
+      @page { margin: 12mm; size: landscape; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>三诊合一分析系统 - 测试用例</h1>
+      <div class="meta">
+        <span>文档版本：v1.0</span>
+        <span>生成日期：2026-10-13</span>
+        <span>共 7 个模块 / 40 条用例</span>
+      </div>
+    </div>
+
+    <div class="summary">
+      <strong>使用说明：</strong>
+      <ul>
+        <li>「实际结果」与「状态」为可填写字段，支持在线编辑后打印；状态默认值「待测」。</li>
+        <li>顶部模块筛选器可按模块定位用例；打印按钮支持横向 A4 输出。</li>
+        <li>状态可选：待测 / 通过 / 失败 / 阻塞 / 不适用。</li>
+      </ul>
+    </div>
+
+    <div class="toolbar no-print">
+      <label>模块筛选：</label>
+      <select id="moduleFilter" class="filter-select">
+        <option value="all">全部模块</option>
+        <option value="auth">用户认证</option>
+        <option value="tongue">舌诊</option>
+        <option value="face">面诊</option>
+        <option value="inquiry">问诊</option>
+        <option value="syn">三诊合参</option>
+        <option value="history">历史记录</option>
+        <option value="gen">全局异常</option>
+      </select>
+      <button class="btn" onclick="window.print()">打印</button>
+      <button class="btn btn-secondary" onclick="resetForm()">重置填写</button>
+    </div>
+
+    <!-- 1. 用户认证 -->
+    <div class="section" data-module="auth">
+      <div class="section-title">1. 用户认证模块 <span class="count">7 条</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-id">用例编号</th>
+              <th class="col-module">功能模块</th>
+              <th class="col-item">测试项</th>
+              <th class="col-pre">前置条件</th>
+              <th class="col-step">操作步骤</th>
+              <th class="col-expect">预期结果</th>
+              <th class="col-actual">实际结果</th>
+              <th class="col-status">状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="case-id">TC-AUTH-001</span></td>
+              <td>用户认证</td>
+              <td>手机号注册-正常</td>
+              <td>手机号未注册</td>
+              <td><ol class="steps"><li>打开注册页</li><li>输入手机号</li><li>点击获取验证码</li><li>输入后端日志/MailHog收到的验证码</li><li>设置密码</li><li>点击注册</li></ol></td>
+              <td>注册成功，跳转登录页</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-AUTH-002</span></td>
+              <td>用户认证</td>
+              <td>注册-验证码错误</td>
+              <td>手机号未注册</td>
+              <td><ol class="steps"><li>输入手机号获取验证码</li><li>输入错误验证码</li><li>点击注册</li></ol></td>
+              <td>提示"验证码错误"，注册失败</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-AUTH-003</span></td>
+              <td>用户认证</td>
+              <td>注册-手机号已注册</td>
+              <td>手机号已注册</td>
+              <td><ol class="steps"><li>输入已注册手机号</li><li>获取验证码</li><li>输入验证码</li><li>点击注册</li></ol></td>
+              <td>提示"手机号已注册"</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-AUTH-004</span></td>
+              <td>用户认证</td>
+              <td>登录-正常</td>
+              <td>已注册账号</td>
+              <td><ol class="steps"><li>输入手机号和密码</li><li>点击登录</li></ol></td>
+              <td>登录成功，跳转首页</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-AUTH-005</span></td>
+              <td>用户认证</td>
+              <td>登录-密码错误</td>
+              <td>已注册账号</td>
+              <td><ol class="steps"><li>输入正确手机号</li><li>输入错误密码</li><li>点击登录</li></ol></td>
+              <td>提示"账号或密码错误"</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-AUTH-006</span></td>
+              <td>用户认证</td>
+              <td>登录-未注册手机号</td>
+              <td>手机号未注册</td>
+              <td><ol class="steps"><li>输入未注册手机号</li><li>输入任意密码</li><li>点击登录</li></ol></td>
+              <td>提示"账号不存在"</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-AUTH-007</span></td>
+              <td>用户认证</td>
+              <td>记住账号密码</td>
+              <td>已登录过</td>
+              <td><ol class="steps"><li>登录时勾选"记住密码"</li><li>退出登录</li><li>重新打开登录页</li></ol></td>
+              <td>手机号和密码自动填充；密码为 AES-GCM 加密存储</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2. 舌诊 -->
+    <div class="section" data-module="tongue">
+      <div class="section-title">2. 舌诊模块 <span class="count">11 条</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-id">用例编号</th>
+              <th class="col-module">功能模块</th>
+              <th class="col-item">测试项</th>
+              <th class="col-pre">前置条件</th>
+              <th class="col-step">操作步骤</th>
+              <th class="col-expect">预期结果</th>
+              <th class="col-actual">实际结果</th>
+              <th class="col-status">状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="case-id">TC-TONGUE-001</span></td>
+              <td>舌诊</td>
+              <td>图片上传-正常</td>
+              <td>已登录</td>
+              <td><ol class="steps"><li>进入舌诊页</li><li>点击本地上传</li><li>选择合规舌象图片</li></ol></td>
+              <td>上传成功，显示缩略图，进入舌体提取流程</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-TONGUE-002</span></td>
+              <td>舌诊</td>
+              <td>图片上传-非图片文件</td>
+              <td>已登录</td>
+              <td><ol class="steps"><li>点击上传</li><li>选择 .txt 或 .pdf 文件</li></ol></td>
+              <td>提示"请上传图片文件"，上传被拒</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-TONGUE-003</span></td>
+              <td>舌诊</td>
+              <td>图片上传-超大文件</td>
+              <td>已登录</td>
+              <td><ol class="steps"><li>点击上传</li><li>选择 &gt;10MB 图片</li></ol></td>
+              <td>提示"文件过大"，上传被拒</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-TONGUE-004</span></td>
+              <td>舌诊</td>
+              <td>摄像头拍摄-正常</td>
+              <td>HTTPS/localhost</td>
+              <td><ol class="steps"><li>点击摄像头采集</li><li>授权摄像头</li><li>对准舌头</li><li>点击拍摄</li></ol></td>
+              <td>摄像头预览正常，拍摄成功，显示采集图</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-TONGUE-005</span></td>
+              <td>舌诊</td>
+              <td>摄像头-无权限</td>
+              <td>已登录</td>
+              <td><ol class="steps"><li>点击摄像头采集</li><li>拒绝浏览器权限请求</li></ol></td>
+              <td>提示"摄像头权限被拒，请使用本地上传"</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-TONGUE-006</span></td>
+              <td>舌诊</td>
+              <td>摄像头-非安全上下文</td>
+              <td>HTTP非localhost</td>
+              <td><ol class="steps"><li>点击摄像头采集</li></ol></td>
+              <td>提示"需 HTTPS 或 localhost 环境"</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-TONGUE-007</span></td>
+              <td>舌诊</td>
+              <td>舌体提取-正常</td>
+              <td>已上传图片</td>
+              <td><ol class="steps"><li>上传完成后等待</li></ol></td>
+              <td>自动提取舌体，显示提取结果</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-TONGUE-008</span></td>
+              <td>舌诊</td>
+              <td>舌体提取-无舌头</td>
+              <td>已上传非舌象图</td>
+              <td><ol class="steps"><li>上传风景图</li><li>等待提取</li></ol></td>
+              <td>提示"未检测到舌头，请重新上传"</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-TONGUE-009</span></td>
+              <td>舌诊</td>
+              <td>AI分析-正常</td>
+              <td>舌体提取成功</td>
+              <td><ol class="steps"><li>自动触发 AI 分析</li><li>等待结果</li></ol></td>
+              <td>显示舌色/苔色/苔厚等特征及 AI 解读</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-TONGUE-010</span></td>
+              <td>舌诊</td>
+              <td>重复采集-覆盖原图</td>
+              <td>已采集过</td>
+              <td><ol class="steps"><li>同会话再次上传图片</li></ol></td>
+              <td>复用同一条记录，旧图删除，新图覆盖 raw.{ext}；不生成新文件</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-TONGUE-011</span></td>
+              <td>舌诊</td>
+              <td>模块切换-历史保留</td>
+              <td>已完成舌诊</td>
+              <td><ol class="steps"><li>切换到面诊/问诊</li><li>切回舌诊</li></ol></td>
+              <td>舌诊历史采集数据保留显示，无新会话生成</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. 面诊 -->
+    <div class="section" data-module="face">
+      <div class="section-title">3. 面诊模块 <span class="count">8 条</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-id">用例编号</th>
+              <th class="col-module">功能模块</th>
+              <th class="col-item">测试项</th>
+              <th class="col-pre">前置条件</th>
+              <th class="col-step">操作步骤</th>
+              <th class="col-expect">预期结果</th>
+              <th class="col-actual">实际结果</th>
+              <th class="col-status">状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="case-id">TC-FACE-001</span></td>
+              <td>面诊</td>
+              <td>图片上传-正常</td>
+              <td>已登录</td>
+              <td><ol class="steps"><li>进入面诊页</li><li>点击本地上传</li><li>选择含人脸图片</li></ol></td>
+              <td>上传成功，显示缩略图</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-FACE-002</span></td>
+              <td>面诊</td>
+              <td>摄像头拍摄-正常</td>
+              <td>HTTPS/localhost</td>
+              <td><ol class="steps"><li>点击摄像头采集</li><li>授权并拍摄</li></ol></td>
+              <td>采集成功，显示图像</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-FACE-003</span></td>
+              <td>面诊</td>
+              <td>人脸检测-正常</td>
+              <td>已上传图片</td>
+              <td><ol class="steps"><li>等待自动检测</li></ol></td>
+              <td>检测到人脸，标注人脸位置</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-FACE-004</span></td>
+              <td>面诊</td>
+              <td>人脸检测-无人脸</td>
+              <td>已上传图片</td>
+              <td><ol class="steps"><li>上传无人脸图片</li></ol></td>
+              <td>提示"未检测到人脸"</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-FACE-005</span></td>
+              <td>面诊</td>
+              <td>人脸检测-多脸</td>
+              <td>已上传图片</td>
+              <td><ol class="steps"><li>上传多人脸图片</li></ol></td>
+              <td>提示"请确保画面中只有一张人脸"或取最大脸</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-FACE-006</span></td>
+              <td>面诊</td>
+              <td>AI分析-正常</td>
+              <td>人脸检测成功</td>
+              <td><ol class="steps"><li>自动触发分析</li></ol></td>
+              <td>显示面色/光泽等特征及 AI 解读</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-FACE-007</span></td>
+              <td>面诊</td>
+              <td>重复采集-覆盖原图</td>
+              <td>已采集过</td>
+              <td><ol class="steps"><li>同会话再次上传</li></ol></td>
+              <td>复用记录，旧图删除，新图覆盖</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-FACE-008</span></td>
+              <td>面诊</td>
+              <td>模块切换-历史保留</td>
+              <td>已完成面诊</td>
+              <td><ol class="steps"><li>切换舌诊/问诊再切回</li></ol></td>
+              <td>面诊历史数据保留显示</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 4. 问诊 -->
+    <div class="section" data-module="inquiry">
+      <div class="section-title">4. 问诊模块 <span class="count">5 条</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-id">用例编号</th>
+              <th class="col-module">功能模块</th>
+              <th class="col-item">测试项</th>
+              <th class="col-pre">前置条件</th>
+              <th class="col-step">操作步骤</th>
+              <th class="col-expect">预期结果</th>
+              <th class="col-actual">实际结果</th>
+              <th class="col-status">状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="case-id">TC-INQUIRY-001</span></td>
+              <td>问诊</td>
+              <td>表单填写-正常提交</td>
+              <td>已登录</td>
+              <td><ol class="steps"><li>进入问诊页</li><li>填写主诉、症状等</li><li>点击提交</li></ol></td>
+              <td>提交成功，显示已填写数据</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-INQUIRY-002</span></td>
+              <td>问诊</td>
+              <td>表单-必填项缺失</td>
+              <td>已登录</td>
+              <td><ol class="steps"><li>主诉留空</li><li>点击提交</li></ol></td>
+              <td>提示"主诉不能为空"</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-INQUIRY-003</span></td>
+              <td>问诊</td>
+              <td>表单-字数超限</td>
+              <td>已登录</td>
+              <td><ol class="steps"><li>主诉输入 &gt;500 字</li><li>提交</li></ol></td>
+              <td>提示字数超限，无法提交</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-INQUIRY-004</span></td>
+              <td>问诊</td>
+              <td>AI分析-正常</td>
+              <td>表单已提交</td>
+              <td><ol class="steps"><li>自动触发 AI 分析</li></ol></td>
+              <td>显示 AI 解读的体质/证候分析</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-INQUIRY-005</span></td>
+              <td>问诊</td>
+              <td>模块切换-历史保留</td>
+              <td>已提交问诊</td>
+              <td><ol class="steps"><li>切换舌诊/面诊再切回</li></ol></td>
+              <td>已填写的问诊数据保留</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5. 三诊合参 -->
+    <div class="section" data-module="syn">
+      <div class="section-title">5. 三诊合参模块 <span class="count">5 条</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-id">用例编号</th>
+              <th class="col-module">功能模块</th>
+              <th class="col-item">测试项</th>
+              <th class="col-pre">前置条件</th>
+              <th class="col-step">操作步骤</th>
+              <th class="col-expect">预期结果</th>
+              <th class="col-actual">实际结果</th>
+              <th class="col-status">状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="case-id">TC-SYN-001</span></td>
+              <td>三诊合参</td>
+              <td>三诊完整-综合分析</td>
+              <td>舌/面/问诊均完成</td>
+              <td><ol class="steps"><li>进入三诊合参页</li><li>点击"生成综合分析"</li></ol></td>
+              <td>调用 AI 生成综合分析结果</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-SYN-002</span></td>
+              <td>三诊合参</td>
+              <td>部分采集缺失-分析</td>
+              <td>仅完成舌诊+问诊</td>
+              <td><ol class="steps"><li>点击"生成综合分析"</li></ol></td>
+              <td>提示"面诊数据缺失，请先完成面诊"或禁止分析</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-SYN-003</span></td>
+              <td>三诊合参</td>
+              <td>报告生成-正常</td>
+              <td>综合分析已完成</td>
+              <td><ol class="steps"><li>点击"生成报告"</li></ol></td>
+              <td>生成完整诊断报告，含三诊结果与调养建议</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-SYN-004</span></td>
+              <td>三诊合参</td>
+              <td>PDF导出-正常</td>
+              <td>报告已生成</td>
+              <td><ol class="steps"><li>点击"导出PDF"</li><li>等待下载</li></ol></td>
+              <td>浏览器下载 PDF，打开内容完整</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-SYN-005</span></td>
+              <td>三诊合参</td>
+              <td>PDF导出-数据缺失</td>
+              <td>未生成报告</td>
+              <td><ol class="steps"><li>直接点击"导出PDF"</li></ol></td>
+              <td>按钮禁用或提示"请先生成报告"</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 6. 历史记录 -->
+    <div class="section" data-module="history">
+      <div class="section-title">6. 历史记录模块 <span class="count">7 条</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-id">用例编号</th>
+              <th class="col-module">功能模块</th>
+              <th class="col-item">测试项</th>
+              <th class="col-pre">前置条件</th>
+              <th class="col-step">操作步骤</th>
+              <th class="col-expect">预期结果</th>
+              <th class="col-actual">实际结果</th>
+              <th class="col-status">状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="case-id">TC-HISTORY-001</span></td>
+              <td>历史记录</td>
+              <td>列表展示-正常</td>
+              <td>已有多条记录</td>
+              <td><ol class="steps"><li>进入历史记录页</li></ol></td>
+              <td>按时间倒序展示记录列表</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-HISTORY-002</span></td>
+              <td>历史记录</td>
+              <td>列表-空数据</td>
+              <td>无任何记录</td>
+              <td><ol class="steps"><li>进入历史记录页</li></ol></td>
+              <td>显示"暂无记录"空状态</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-HISTORY-003</span></td>
+              <td>历史记录</td>
+              <td>搜索-按时间范围</td>
+              <td>有历史记录</td>
+              <td><ol class="steps"><li>选择时间范围</li><li>点击查询</li></ol></td>
+              <td>仅显示该时间段内记录</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-HISTORY-004</span></td>
+              <td>历史记录</td>
+              <td>搜索-按症状关键词</td>
+              <td>有历史记录</td>
+              <td><ol class="steps"><li>输入症状关键词</li><li>查询</li></ol></td>
+              <td>显示包含该症状的记录</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-HISTORY-005</span></td>
+              <td>历史记录</td>
+              <td>报告对比-正常</td>
+              <td>至少2条记录</td>
+              <td><ol class="steps"><li>勾选两条记录</li><li>点击"对比"</li></ol></td>
+              <td>弹出对比视图，并排展示两份报告差异</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-HISTORY-006</span></td>
+              <td>历史记录</td>
+              <td>报告对比-数据不足</td>
+              <td>仅1条记录</td>
+              <td><ol class="steps"><li>勾选1条</li><li>点击"对比"</li></ol></td>
+              <td>按钮禁用或提示"请至少选择2条"</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-HISTORY-007</span></td>
+              <td>历史记录</td>
+              <td>详情查看</td>
+              <td>有记录</td>
+              <td><ol class="steps"><li>点击某条记录</li></ol></td>
+              <td>跳转报告详情页，显示完整报告</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 7. 全局异常 -->
+    <div class="section" data-module="gen">
+      <div class="section-title">7. 全局异常场景 <span class="count">6 条</span></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-id">用例编号</th>
+              <th class="col-module">功能模块</th>
+              <th class="col-item">测试项</th>
+              <th class="col-pre">前置条件</th>
+              <th class="col-step">操作步骤</th>
+              <th class="col-expect">预期结果</th>
+              <th class="col-actual">实际结果</th>
+              <th class="col-status">状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="case-id">TC-GEN-001</span></td>
+              <td>全局</td>
+              <td>未登录访问采集页</td>
+              <td>未登录</td>
+              <td><ol class="steps"><li>直接访问 /collect/tongue</li></ol></td>
+              <td>跳转登录页</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-GEN-002</span></td>
+              <td>全局</td>
+              <td>Token过期</td>
+              <td>Token已过期</td>
+              <td><ol class="steps"><li>进行任意需鉴权操作</li></ol></td>
+              <td>自动跳转登录页，提示"登录已过期"</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-GEN-003</span></td>
+              <td>全局</td>
+              <td>网络异常-上传中</td>
+              <td>上传进行中</td>
+              <td><ol class="steps"><li>上传中断网</li></ol></td>
+              <td>提示"网络异常，上传失败"，可重试</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-GEN-004</span></td>
+              <td>全局</td>
+              <td>后端服务未启动</td>
+              <td>后端进程未启动</td>
+              <td><ol class="steps"><li>任意接口调用</li></ol></td>
+              <td>前端提示"服务不可用"或网络错误</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-GEN-005</span></td>
+              <td>全局</td>
+              <td>路由别名访问</td>
+              <td>已登录</td>
+              <td><ol class="steps"><li>直接访问 /collect/tongue</li></ol></td>
+              <td>正常加载舌诊页（验证路径别名配置）</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+            <tr>
+              <td><span class="case-id">TC-GEN-006</span></td>
+              <td>全局</td>
+              <td>主题切换-双主题</td>
+              <td>已登录</td>
+              <td><ol class="steps"><li>切换深色/浅色主题</li></ol></td>
+              <td>全局样式跟随切换，Design Token 生效</td>
+              <td><textarea class="actual-input"></textarea></td>
+              <td><select class="status-select status-pending"><option>待测</option><option>通过</option><option>失败</option><option>阻塞</option><option>不适用</option></select></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>测试执行人：______________　　执行日期：______________</span>
+      <span>三诊合一分析系统 · 测试用例文档 v1.0</span>
+    </div>
+  </div>
+
+  <script>
+    // 模块筛选
+    document.getElementById('moduleFilter').addEventListener('change', function(e) {
+      const val = e.target.value;
+      document.querySelectorAll('.section').forEach(sec => {
+        if (val === 'all' || sec.dataset.module === val) {
+          sec.classList.remove('hidden');
+        } else {
+          sec.classList.add('hidden');
+        }
+      });
+    });
+
+    // 状态颜色变化
+    document.querySelectorAll('.status-select').forEach(sel => {
+      const updateColor = () => {
+        sel.classList.remove('status-pending','status-pass','status-fail','status-blocked','status-na');
+        const v = sel.value;
+        if (v === '通过') sel.classList.add('status-pass');
+        else if (v === '失败') sel.classList.add('status-fail');
+        else if (v === '阻塞') sel.classList.add('status-blocked');
+        else if (v === '不适用') sel.classList.add('status-na');
+        else sel.classList.add('status-pending');
+      };
+      sel.addEventListener('change', updateColor);
+      updateColor();
+    });
+
+    // 重置填写
+    function resetForm() {
+      if (!confirm('确认清空所有「实际结果」与「状态」？此操作不可撤销。')) return;
+      document.querySelectorAll('.actual-input').forEach(t => t.value = '');
+      document.querySelectorAll('.status-select').forEach(s => {
+        s.value = '待测';
+        s.dispatchEvent(new Event('change'));
+      });
+    }
+  </script>
+</body>
+</html>
