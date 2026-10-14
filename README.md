@@ -136,6 +136,8 @@ cd backend;  .\.venv\Scripts\python.exe -m pytest        # 115 项，全通过
 cd frontend; npm run build; npm run lint                  # 构建与 eslint 无 error/warning
 ```
 
+> 测试会把媒体目录隔离到临时目录（会话级改写 `settings.MEDIA_ROOT`），因此 `backend/media` 不会被测试写盘污染、不产生孤儿图片。
+
 | 检查项 | 通过标准 |
 |---|---|
 | `GET /api/v1/health` | 返回 `{code: 0, message: "ok", data: {...}, trace_id: "..."}` |

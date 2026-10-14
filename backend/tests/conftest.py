@@ -7,7 +7,7 @@
 
 from __future__ import annotations
 
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncGenerator, Iterator
 
 import pytest
 import pytest_asyncio
@@ -71,3 +71,20 @@ def _reset_login_limiter() -> None:
     from app.services import auth as auth_service
 
     auth_service._limiter._failures.clear()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _isolate_media_root(tmp_path_factory: pytest.TempPathFactory) -> Iterator[None]:
+    """把媒体目录隔离到临时目录，避免测试写盘污染真实 `backend/media`。
+
+    用例的数据库事务会回滚，但图片是直接写磁盘的，不回滚——若共用真实媒体目录，
+    每跑一次测试就会在 `media/` 下留下无对应记录的孤儿图片。
+    `image_storage` / `report_service` 均在**调用时**读取 `settings.MEDIA_ROOT`，
+    故运行期改写该配置即可整体切换；会话结束自动还原。
+    """
+    original = settings.MEDIA_ROOT
+    settings.MEDIA_ROOT = str(tmp_path_factory.mktemp("media"))
+    try:
+        yield
+    finally:
+        settings.MEDIA_ROOT = original
