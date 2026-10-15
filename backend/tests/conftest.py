@@ -22,7 +22,7 @@ from app.main import app
 
 
 @pytest.fixture(scope="session")
-def client() -> TestClient:
+def client() -> Iterator[TestClient]:
     """进程内测试客户端（无需启动 uvicorn）。"""
     with TestClient(app) as test_client:
         yield test_client

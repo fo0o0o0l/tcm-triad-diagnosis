@@ -86,7 +86,7 @@ function patientKey(item: ReportHistoryItem): string {
 }
 
 function optionLabel(item: ReportHistoryItem): string {
-  const patient = item.anonymous ? '匿名患者' : item.patient_name || '未登记姓名'
+  const patient = item.anonymous ? '匿名用户' : item.patient_name || '未登记姓名'
   return `${formatDate(item.generated_at)} ${item.summary || '暂无结论'} · ${patient}`
 }
 
@@ -352,7 +352,7 @@ export function ComparePage() {
   const healthDirection = result ? DIRECTION_META[result.health.direction] : null
 
   return (
-    <PageShell title="数据对比" description="对比同一患者两次诊断的三诊特征与结论变化">
+    <PageShell title="数据对比" description="对比同一用户两次诊断的三诊特征与结论变化">
       <div className={styles.layout}>
         <div className={styles.main}>
           {/* 报告选择器（§5.7.1） */}
@@ -401,7 +401,7 @@ export function ComparePage() {
               </label>
             </div>
             {(baseId || targetId) && !ready && !insufficient ? (
-              <div className={styles.hint}>请分别选择同一患者的两份报告（基准与对比）</div>
+              <div className={styles.hint}>请分别选择同一用户的两份报告（基准与对比）</div>
             ) : null}
           </section>
 
@@ -424,7 +424,7 @@ export function ComparePage() {
             </div>
           ) : !ready ? (
             <div className={`${styles.card} ${styles.empty}`}>
-              <div>请选择两份同一患者的报告开始对比</div>
+              <div>请选择两份同一用户的报告开始对比</div>
             </div>
           ) : loading ? (
             <div className={styles.card}>
@@ -440,7 +440,7 @@ export function ComparePage() {
               <section className={`${styles.card} ${styles.patientBar}`}>
                 <span className={styles.patientName}>
                   {result.base.anonymous
-                    ? '匿名患者'
+                    ? '匿名用户'
                     : result.base.patient_name || '未登记姓名'}
                 </span>
                 <span className={styles.patientMeta}>

@@ -70,6 +70,13 @@ const FEATURE_LABELS: Record<string, string> = {
   acne: '痘痘',
   spots: '斑点',
 }
+const FACE_AREA_LABELS: Record<string, string> = {
+  forehead: '额头',
+  left_cheek: '左颊',
+  right_cheek: '右颊',
+  nose: '鼻部',
+  chin: '下颌',
+}
 const QID_LABELS: Record<string, string> = {
   gender: '性别',
   age: '年龄',
@@ -87,6 +94,10 @@ const QID_LABELS: Record<string, string> = {
   urine: '小便',
   chest_abdomen: '胸腹',
   other_symptoms: '其他',
+  menstruation_cycle: '月经周期',
+  menstruation_volume: '经量',
+  menstruation_color: '经色 / 经质',
+  menstruation_pain: '经期伴随',
 }
 
 function confidenceLevel(value: number): 'high' | 'medium' | 'low' {
@@ -239,7 +250,7 @@ export function ReportPage() {
 
   // 开始下一位患者：生成全新会话标识并跳转舌诊采集页（本报告保留在「我的报告」）
   const startNextPatient = useCallback(() => {
-    if (!window.confirm('开始下一位患者？将清空当前会话标识，本报告仍可在「我的报告」中查看。')) {
+    if (!window.confirm('开始下一位用户？将清空当前会话标识，本报告仍可在「我的报告」中查看。')) {
       return
     }
     navigate(withSession(ROUTES.TONGUE, startNewSession()))
@@ -279,7 +290,7 @@ export function ReportPage() {
               </h2>
               <p className={styles.reportMeta}>
                 {report.header.patient_snapshot?.anonymous
-                  ? '匿名患者'
+                  ? '匿名用户'
                   : report.header.patient_snapshot?.name || '未登记姓名'}
                 {report.header.patient_snapshot?.gender ? ` · ${report.header.patient_snapshot.gender}` : ''}
                 {report.header.patient_snapshot?.age ? ` · ${report.header.patient_snapshot.age} 岁` : ''}
@@ -418,7 +429,11 @@ export function ReportPage() {
                                 <td>{FEATURE_LABELS[feature.name] ?? feature.name}</td>
                                 <td>
                                   {feature.label}
-                                  {feature.area?.length ? `（${feature.area.join('、')}）` : ''}
+                                  {feature.area?.length
+                                    ? `（${feature.area
+                                        .map((area) => FACE_AREA_LABELS[area] ?? area)
+                                        .join('、')}）`
+                                    : ''}
                                 </td>
                                 <td>{Math.round(feature.confidence * 100)}%</td>
                               </tr>

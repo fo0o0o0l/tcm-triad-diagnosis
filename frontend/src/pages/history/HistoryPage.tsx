@@ -29,7 +29,7 @@ type QuickFilter = 'all' | 'mine' | 'anonymous' | 'archived'
 const QUICK_FILTERS: { key: QuickFilter; label: string; disabled?: boolean; hint?: string }[] = [
   { key: 'all', label: '全部' },
   { key: 'mine', label: '我的报告', disabled: true, hint: '报告暂无归属字段，暂不可用' },
-  { key: 'anonymous', label: '匿名患者' },
+  { key: 'anonymous', label: '匿名用户' },
   { key: 'archived', label: '已归档' },
 ]
 
@@ -77,7 +77,7 @@ interface HistoryCardProps {
 
 function HistoryCard({ item, selected, deleting, onToggle, onOpen, onDelete }: HistoryCardProps) {
   const health = item.health_level ? HEALTH_META[item.health_level] : null
-  const patient = item.anonymous ? '匿名患者' : item.patient_name || '未登记姓名'
+  const patient = item.anonymous ? '匿名用户' : item.patient_name || '未登记姓名'
 
   const onKeyDown = (event: KeyboardEvent<HTMLLIElement>) => {
     if (event.key === 'Enter') {
@@ -323,7 +323,7 @@ export function HistoryPage() {
         .map((id) => items.find((row) => row.report_id === id))
         .filter((row): row is ReportHistoryItem => Boolean(row))
       if (chosen.some((row) => patientKey(row) !== patientKey(item))) {
-        setCompareHint('仅支持同一患者的多条记录对比')
+        setCompareHint('仅支持同一用户的多条记录对比')
         return
       }
       if (selected.length >= 2) {
@@ -361,7 +361,7 @@ export function HistoryPage() {
   )
 
   return (
-    <PageShell title="历史诊断记录" description="按患者、会话号、结论关键词检索并重新打开报告">
+    <PageShell title="历史记录">
       <div className={styles.layout}>
         <div className={styles.main}>
           {/* 搜索筛选栏（§5.6.2） */}
@@ -371,7 +371,7 @@ export function HistoryPage() {
                 className={styles.searchInput}
                 type="text"
                 value={keywordInput}
-                placeholder="患者姓名 / 会话编号 / 结论关键词"
+                placeholder="用户姓名 / 会话编号 / 结论关键词"
                 onChange={(event) => setKeywordInput(event.target.value)}
               />
               <button type="submit" className="btn btn--primary">
@@ -499,7 +499,7 @@ export function HistoryPage() {
             <div className={styles.compareBar}>
               <span className={styles.compareBarText}>
                 已选 {selected.length} 条
-                {compareReady ? ' · 可对比' : ' · 再选 1 条同患者记录'}
+                {compareReady ? ' · 可对比' : ' · 再选 1 条同用户记录'}
               </span>
               <button
                 type="button"

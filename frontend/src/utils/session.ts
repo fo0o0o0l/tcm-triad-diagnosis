@@ -99,7 +99,7 @@ export function sessionDisplayNo(sessionId: string, patient?: SessionPatient | n
   const month = matched ? Number(matched[2]) : now.getMonth() + 1
   const day = matched ? Number(matched[3]) : now.getDate()
   const sequence = matched ? Number(matched[4]) : 0
-  const who = patient?.anonymous ? '匿名患者' : patient?.name?.trim() || '待补姓名'
+  const who = patient?.anonymous ? '匿名用户' : patient?.name?.trim() || '待补姓名'
   const sequenceSuffix = sequence > 1 ? ` #${sequence}` : ''
   return `${who}_${month}月${day}日${sequenceSuffix}`
 }

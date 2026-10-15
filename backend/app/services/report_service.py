@@ -71,6 +71,9 @@ _HEALTH_LABELS = {"good": "健康", "fair": "一般", "poor": "较差", "bad": "
 
 _REPORT_DISCLAIMER = "本报告由系统生成，仅供临床辅助参考，不构成最终医疗诊断，须由医师确认签署。"
 
+#: 会话 id 解析（`s_YYYYMMDD_NNNN`，用于推导会话编号中的创建日期与当天序号）
+_SESSION_ID_PATTERN = re.compile(r"^s_(\d{4})(\d{2})(\d{2})_(\d+)$")
+
 #: 注册中文字体（reportlab 内置 Adobe CID 字体，无需外部字体文件）
 _CJK_FONT = "STSong-Light"
 _font_registered = False
@@ -389,8 +392,8 @@ def pdf_ref(report_no: str) -> str:
 
 def pdf_filename(report: Report) -> str:
     """文件名规则：`报告_{姓名}_{会话号}_{yyyyMMdd}.pdf`（PRD §6.5）。"""
-    name = (report.patient_snapshot or {}).get("name") or "患者"
-    name = re.sub(r"[\\/:*?\"<>|\s]+", "", str(name)) or "患者"
+    name = (report.patient_snapshot or {}).get("name") or "用户"
+    name = re.sub(r"[\\/:*?\"<>|\s]+", "", str(name)) or "用户"
     session = re.sub(r"[\\/:*?\"<>|\s]+", "", report.session_id) or "session"
     date = report.generated_at.strftime("%Y%m%d")
     return f"报告_{name}_{session}_{date}.pdf"
@@ -471,6 +474,27 @@ def _module_image(module_detail: dict | None) -> RLImage | None:
     return image
 
 
+def _session_display_no(session_id: str, snapshot: dict | None) -> str:
+    """会话编号展示（对齐前端 `sessionDisplayNo`）：`{姓名|待补姓名|匿名患者}_{M月D日}[ #序号]`。
+
+    - 日期取会话 id 中的创建日期（无法解析时退回当前日期）；
+    - 当天第 2 个及以后的会话追加 `#序号`，避免同一患者同天重号。
+    """
+    snapshot = snapshot or {}
+    matched = _SESSION_ID_PATTERN.match(session_id or "")
+    if matched:
+        month, day, sequence = int(matched.group(2)), int(matched.group(3)), int(matched.group(4))
+    else:
+        now = datetime.now()
+        month, day, sequence = now.month, now.day, 0
+    if snapshot.get("anonymous"):
+        who = "匿名用户"
+    else:
+        who = str(snapshot.get("name") or "").strip() or "待补姓名"
+    suffix = f" #{sequence}" if sequence > 1 else ""
+    return f"{who}_{month}月{day}日{suffix}"
+
+
 def render_pdf(report_data: dict[str, Any]) -> bytes:
     """由报告数据渲染 PDF（与在线预览同源，保证版式一致）。"""
     styles = _styles()
@@ -482,10 +506,10 @@ def render_pdf(report_data: dict[str, Any]) -> bytes:
     story: list[Any] = []
     story.append(Paragraph("三诊合参综合报告", styles["title"]))
     snapshot = header.get("patient_snapshot") or {}
-    patient = "匿名患者" if snapshot.get("anonymous") else (snapshot.get("name") or "未登记姓名")
+    patient = "匿名用户" if snapshot.get("anonymous") else (snapshot.get("name") or "未登记姓名")
     meta_parts = [
-        f"会话编号：{header.get('session_id', '')}",
-        f"患者：{patient}",
+        f"会话编号：{_session_display_no(header.get('session_id', ''), snapshot)}",
+        f"用户：{patient}",
     ]
     if snapshot.get("gender"):
         meta_parts.append(f"性别：{snapshot['gender']}")

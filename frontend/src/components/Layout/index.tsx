@@ -77,7 +77,7 @@ export function Layout({ children }: LayoutProps) {
   // 无需退出登录即可开始下一位患者的诊断（旧会话报告仍保留在「我的报告」）。
   const handleNewSession = useCallback(() => {
     if (
-      !window.confirm('开始下一位患者？将清空当前会话的采集数据，已生成的报告仍可在「我的报告」中查看。')
+      !window.confirm('开始下一位用户？将清空当前会话的采集数据，已生成的报告仍可在「我的报告」中查看。')
     ) {
       return
     }
@@ -97,7 +97,7 @@ export function Layout({ children }: LayoutProps) {
               type="button"
               className="app-layout__session"
               onClick={handleNewSession}
-              title="开始下一位患者，清空当前会话数据"
+              title="开始下一位用户，清空当前会话数据"
             >
               ＋ 新建会话
             </button>

@@ -40,7 +40,7 @@ const GROUPS: { key: GroupKey; label: string }[] = [
 
 const ROLE_LABELS: Record<string, string> = {
   doctor: '医师',
-  patient: '患者',
+  patient: '用户',
   admin: '管理员',
 }
 
@@ -520,7 +520,7 @@ export function ProfilePage() {
                             onClick={() => navigate(withSession(ROUTES.REPORT, item.session_id))}
                           >
                             <span className={styles.reportPatient}>
-                              {item.anonymous ? '匿名患者' : item.patient_name || '未填写'}
+                              {item.anonymous ? '匿名用户' : item.patient_name || '未填写'}
                             </span>
                             <span className={styles.hint}>{formatDateTime(item.generated_at)}</span>
                             {item.health_level ? (

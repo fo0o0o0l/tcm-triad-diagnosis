@@ -309,7 +309,7 @@ async def build_compare(
 ) -> CompareResult:
     """组装两份报告的对比结果；跨患者对比直接阻断（§5.7.3）。"""
     if patient_key(base_report) != patient_key(target_report):
-        raise BusinessError(ErrorCode.PARAM_INVALID, "仅支持同一患者的多条报告对比")
+        raise BusinessError(ErrorCode.PARAM_INVALID, "仅支持同一用户的多条报告对比")
 
     base_data = base_report.report_data or {}
     target_data = target_report.report_data or {}
